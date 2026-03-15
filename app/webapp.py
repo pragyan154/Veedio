@@ -214,12 +214,6 @@ def api_run():
     _save_uploaded_images(request.files.getlist("input_images"))
 
     env = os.environ.copy()
-    gemini_key = (form.get("gemini_api_key") or "").strip()
-    openrouter_key = (form.get("openrouter_api_key") or "").strip()
-    if gemini_key:
-        env["GEMINI_API_KEY"] = gemini_key
-    if openrouter_key:
-        env["OPENROUTER_API_KEY"] = openrouter_key
     env["PYTHONUNBUFFERED"] = "1"
 
     proc = subprocess.Popen(
