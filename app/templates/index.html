@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NewPick UI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <h1>NewPick Pipeline UI</h1>
+    <p class="sub">Set config, run pipeline, and track progress live.</p>
+
+    <form id="runForm" enctype="multipart/form-data">
+      <div class="grid">
+        <section>
+          <label>Content</label>
+          <textarea id="content" name="content" rows="8" required></textarea>
+
+          <div class="row">
+            <div>
+              <label>Language</label>
+              <select id="language" name="language">
+                <option value="hindi">hindi</option>
+                <option value="hinglish">hinglish</option>
+              </select>
+            </div>
+            <div>
+              <label>Orientation</label>
+              <select id="video_orientation" name="video_orientation">
+                <option value="vertical">vertical</option>
+                <option value="horizontal">horizontal</option>
+              </select>
+            </div>
+            <div>
+              <label>Theme</label>
+              <select id="input_theme" name="input_theme">
+                <option value="pg">pg</option>
+                <option value="failaan">failaan</option>
+                <option value="newspick">newspick</option>
+                <option value="np">np</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Audio Size</label>
+              <select id="voiceover_size" name="voiceover_size">
+                <option value="small">small</option>
+                <option value="medium">medium</option>
+                <option value="large">large</option>
+                <option value="huge">huge</option>
+              </select>
+            </div>
+            <div>
+              <label>Voice Names (comma separated)</label>
+              <input id="voice_names" name="voice_names" type="text" />
+            </div>
+          </div>
+
+          <div class="row checks">
+            <label><input type="checkbox" id="ai_content" name="ai_content" checked /> AI Content</label>
+            <label><input type="checkbox" id="enable_heading" name="enable_heading" checked /> Heading</label>
+            <label><input type="checkbox" id="subtitles_enabled" name="subtitles_enabled" checked /> Subtitles</label>
+            <label><input type="checkbox" id="image_review_ai" name="image_review_ai" checked /> Image Review AI</label>
+          </div>
+
+          <label>Heading Input (optional)</label>
+          <textarea id="heading_input" name="heading_input" rows="2"></textarea>
+
+          <div class="row">
+            <div>
+              <label>Image Loop Seconds</label>
+              <input id="image_loop_seconds" name="image_loop_seconds" type="number" min="1" value="10" />
+            </div>
+            <div>
+              <label>Default Audio Path</label>
+              <input id="default_audio" name="default_audio" type="text" value="BreakinNews-2.mp3" />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label>Input Videos (one path per line)</label>
+          <textarea id="input_videos" name="input_videos" rows="4"></textarea>
+
+          <div class="row">
+            <div>
+              <label>Input Video Position</label>
+              <select id="input_videos_position" name="input_videos_position">
+                <option value="prefix">prefix</option>
+                <option value="suffix">suffix</option>
+              </select>
+            </div>
+            <div class="checks one">
+              <label><input type="checkbox" id="input_videos_audio" name="input_videos_audio" /> Use Input Video Audio</label>
+            </div>
+          </div>
+
+          <div class="row checks">
+            <label><input type="checkbox" id="enable_image_download" name="enable_image_download" checked /> Enable Image Download</label>
+            <label><input type="checkbox" id="enable_image_generation" name="enable_image_generation" checked /> Enable Image Generation</label>
+          </div>
+
+          <label>Input Images Upload (optional, replaces existing)</label>
+          <input id="input_images" name="input_images" type="file" multiple accept=".jpg,.jpeg,.png,.webp" />
+
+          <label>GEMINI_API_KEY</label>
+          <input id="gemini_api_key" name="gemini_api_key" type="password" />
+
+          <label>OPENROUTER_API_KEY (optional)</label>
+          <input id="openrouter_api_key" name="openrouter_api_key" type="password" />
+
+          <button id="runBtn" type="submit">Save + Run</button>
+          <div id="status" class="status"></div>
+        </section>
+      </div>
+    </form>
+
+    <h2>Progress</h2>
+    <pre id="logs"></pre>
+
+    <h2>Latest Video</h2>
+    <video id="video" controls></video>
+  </div>
+
+<script>
+const form = document.getElementById('runForm');
+const logs = document.getElementById('logs');
+const statusEl = document.getElementById('status');
+const runBtn = document.getElementById('runBtn');
+const video = document.getElementById('video');
+let pollTimer = null;
+
+function setChecks(name, value) {
+  const el = document.getElementById(name);
+  if (el) el.checked = !!value;
+}
+
+function setValue(name, value) {
+  const el = document.getElementById(name);
+  if (el != null && value != null) el.value = value;
+}
+
+async function loadConfig() {
+  const r = await fetch('/api/config');
+  const cfg = await r.json();
+  setValue('content', cfg.content || '');
+  setValue('language', cfg.language || 'hindi');
+  setValue('video_orientation', cfg.video_orientation || 'vertical');
+  setValue('input_theme', cfg.input_theme || 'pg');
+  setValue('voiceover_size', cfg.voiceover_size || 'small');
+  setValue('voice_names', (cfg.voice_names || []).join(', '));
+  setChecks('ai_content', cfg.ai_content);
+  setChecks('enable_heading', cfg.enable_heading);
+  setValue('heading_input', cfg.heading_input || '');
+  setChecks('subtitles_enabled', cfg.subtitles_enabled);
+  setChecks('image_review_ai', cfg.image_review_ai);
+  setValue('image_loop_seconds', cfg.image_loop_seconds || 10);
+  setValue('input_videos', (cfg.input_videos || []).map(v => v.path || '').join('\n'));
+  setValue('input_videos_position', cfg.input_videos_position || 'prefix');
+  setChecks('input_videos_audio', cfg.input_videos_audio);
+  setValue('default_audio', cfg.default_audio || 'BreakinNews-2.mp3');
+  setChecks('enable_image_download', cfg.enable_image_download);
+  setChecks('enable_image_generation', cfg.enable_image_generation);
+}
+
+async function pollProgress() {
+  const r = await fetch('/api/progress');
+  const p = await r.json();
+  logs.textContent = (p.logs || []).join('\n');
+  logs.scrollTop = logs.scrollHeight;
+
+  if (p.latest_video_url) {
+    video.src = p.latest_video_url + '?t=' + Date.now();
+  }
+
+  if (!p.running) {
+    runBtn.disabled = false;
+    if (p.returncode === 0) statusEl.textContent = 'Completed successfully';
+    else if (p.returncode != null) statusEl.textContent = 'Failed with exit code ' + p.returncode;
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  runBtn.disabled = true;
+  statusEl.textContent = 'Starting...';
+  logs.textContent = '';
+
+  const fd = new FormData(form);
+  const r = await fetch('/api/run', { method: 'POST', body: fd });
+  const data = await r.json();
+
+  if (!r.ok || !data.ok) {
+    statusEl.textContent = data.error || 'Failed to start';
+    runBtn.disabled = false;
+    return;
+  }
+
+  statusEl.textContent = 'Running...';
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(pollProgress, 1200);
+  pollProgress();
+});
+
+loadConfig();
+pollProgress();
+</script>
+</body>
+</html>

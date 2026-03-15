@@ -1,0 +1,78 @@
+:root {
+  --bg: #f7f7f5;
+  --ink: #1f2a1f;
+  --muted: #57635a;
+  --panel: #ffffff;
+  --accent: #1f7a4c;
+  --border: #dce3dc;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  background: radial-gradient(circle at 20% 0%, #f3f8ee 0%, var(--bg) 55%);
+  color: var(--ink);
+}
+.wrap { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
+h1 { margin: 0 0 6px; font-size: 34px; }
+.sub { margin: 0 0 20px; color: var(--muted); }
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+}
+section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+label { display:block; margin: 8px 0 6px; font-weight: 600; font-size: 13px; }
+input, select, textarea, button {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 14px;
+}
+textarea { resize: vertical; }
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.checks { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0; }
+.checks label { margin: 0; font-weight: 500; display: flex; gap: 8px; align-items: center; }
+.checks input { width: auto; }
+.one { align-items: end; }
+button {
+  background: linear-gradient(135deg, #185f3e, var(--accent));
+  color: white;
+  border: none;
+  font-weight: 700;
+  margin-top: 12px;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.status { margin-top: 8px; color: var(--muted); font-weight: 600; }
+pre {
+  background: #111718;
+  color: #d9efe0;
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 240px;
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid #283834;
+}
+video {
+  width: 100%;
+  max-height: 460px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #0d1210;
+}
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .row { grid-template-columns: 1fr; }
+}

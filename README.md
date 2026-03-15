@@ -84,6 +84,33 @@ python main.py
 
 ---
 
+## Docker UI (Minimal)
+
+Build image:
+
+```bash
+docker build -t newspick-ui .
+```
+
+Run container:
+
+```bash
+docker run --rm -p 7860:7860 \
+  -v "$(pwd)/app/InputImage:/app/app/InputImage" \
+  -v "$(pwd)/app/final_videos:/app/app/final_videos" \
+  newspick-ui
+```
+
+Open UI:
+
+```
+http://localhost:7860
+```
+
+Use the UI to set all runtime config and API keys, run pipeline, and watch progress logs.
+
+---
+
 ## Configuration
 
 ### Environment Variables
