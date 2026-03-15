@@ -1,0 +1,6 @@
+Update the app folder for following change:
+-- Use horizontal video generation, check all the supported poisition of Logo and text.
+-- Horizontal or Vertical will go in input, which one to choose.
+-- Use openrouter integration also for AI Parts.
+-- Create a file for different prompts used.
+-- Support hinglish langauge.

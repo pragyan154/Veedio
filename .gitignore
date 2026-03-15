@@ -1,0 +1,35 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Pipeline outputs
+app/runs/
+app/final_videos/
+app/downloaded_images/
+app/gemini_images/
+pipeline_progress.json
+stage_progress.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+app/scibugai-0c6edfa92c76.json

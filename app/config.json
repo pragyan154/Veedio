@@ -1,0 +1,57 @@
+{
+    "InputImageanalysisprompt": "Provide a single-line, highly detailed factual summary of this image,including the names of any famous people or landmarks present.",
+    "text_models": [
+        "gemini-2.5-flash",
+        "gemini-3-flash-preview",
+        "gemini-2.0-flash",
+        "gemini-2.5-pro"
+        
+    ],
+    "image_model_primary": [
+        "imagen-4.0-fast-generate-001",
+        "imagen-4.0-generate-001",
+        "gemini-2.5-flash",
+        "gemini-2.5-pro",
+        "imagen-4.0-ultra-generate-001"
+    ],
+    "voice_models": [
+        "gemini-2.5-pro-preview-tts"
+    ],
+    "voice_names": [
+        "Schedar"
+    ],
+    "openrouter_text_models": [
+        "google/gemini-2.5-flash-preview",
+        "google/gemini-2.0-flash-001",
+        "anthropic/claude-sonnet-4",
+        "openai/gpt-4o-mini"
+    ],
+    "openrouter_image_models": [
+        "openai/dall-e-3"
+    ],
+    "ai_providers": {
+        "script_generation": "gemini",
+        "image_analysis": "gemini",
+        "image_mapping": "gemini",
+        "search_queries": "gemini",
+        "visual_descriptions": "gemini",
+        "image_evaluation": "gemini",
+        "image_generation": "gemini"
+    },
+    "ai_provider": "gemini",
+    "features": {
+        "enable_image_download": false,
+        "enable_image_generation": false
+    },
+    "max_retries": 5,
+    "base_delay": 1.5,
+    "strict_match_threshold": 1,
+    "image_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp"
+    ],
+    "tracking_file": "pipeline_progress.json",
+    "language": "hindi"
+}

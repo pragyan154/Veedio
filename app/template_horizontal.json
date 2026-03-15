@@ -1,0 +1,42 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+
+  "background": {
+    "source_from": "bg/pgbg.mp4",
+    "loop": true,
+    "blur": false
+  },
+
+  "main_media": {
+    "x": 0.0,
+    "y": 0.15,
+    "w": 1.0,
+    "h": 0.65
+  },
+
+  "subtitle": {
+    "y_margin_bottom": 40
+  },
+
+  "heading": {
+    "text": "",
+    "y_margin_top": 10,
+    "font_size": 52,
+    "bg_color": [255, 255, 0, 255],
+    "text_color": [0, 0, 0, 255]
+  },
+
+  "logo": {
+    "enabled": true,
+    "position": "top-right",
+    "supported_positions": ["top-left", "top-right", "bottom-left", "bottom-right"],
+    "x_margin": 20,
+    "y_margin": 20,
+    "max_width": 120,
+    "max_height": 60
+  }
+}
