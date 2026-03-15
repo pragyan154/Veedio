@@ -188,16 +188,16 @@ def api_run():
 
     values = {
         "CONTENT": content,
-        "AI_CONTENT": _to_bool(form.get("ai_content"), True),
+        "AI_CONTENT": _to_bool(form.get("ai_content"), False),
         "VOICEOVER_SIZE": (form.get("voiceover_size") or "small").strip().lower(),
         "VOICE_NAMES": [x.strip() for x in (form.get("voice_names") or "Schedar").split(",") if x.strip()],
         "LANGUAGE": (form.get("language") or "hindi").strip().lower(),
         "VIDEO_ORIENTATION": (form.get("video_orientation") or "vertical").strip().lower(),
         "INPUT_THEME": (form.get("input_theme") or "pg").strip().lower(),
-        "ENABLE_HEADING": _to_bool(form.get("enable_heading"), True),
+        "ENABLE_HEADING": _to_bool(form.get("enable_heading"), False),
         "HEADING_INPUT": form.get("heading_input") or "",
-        "SUBTITLES_ENABLED": _to_bool(form.get("subtitles_enabled"), True),
-        "IMAGE_REVIEW_AI": _to_bool(form.get("image_review_ai"), True),
+        "SUBTITLES_ENABLED": _to_bool(form.get("subtitles_enabled"), False),
+        "IMAGE_REVIEW_AI": _to_bool(form.get("image_review_ai"), False),
         "IMAGE_LOOP_SECONDS": int(form.get("image_loop_seconds") or 10),
         "INPUT_VIDEOS": _parse_input_videos(form.get("input_videos") or ""),
         "INPUT_VIDEOS_POSITION": (form.get("input_videos_position") or "prefix").strip().lower(),
@@ -208,8 +208,8 @@ def api_run():
     _write_pipeline_input(values)
     _write_config_features(
         cfg,
-        _to_bool(form.get("enable_image_download"), True),
-        _to_bool(form.get("enable_image_generation"), True),
+        _to_bool(form.get("enable_image_download"), False),
+        _to_bool(form.get("enable_image_generation"), False),
     )
     _save_uploaded_images(request.files.getlist("input_images"))
 
