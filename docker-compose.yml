@@ -8,4 +8,6 @@ services:
     container_name: newspick-ui
     ports:
       - "7860:7860"
+    volumes:
+      - ${HOME}/Downloads:/app/app/final_videos
     restart: unless-stopped
